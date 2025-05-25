@@ -1,0 +1,63 @@
+<Window x:Class="SyncCore.Views.ConnectionView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SyncCore.Views"
+        mc:Ignorable="d"
+        Title="Database Connection"
+        Height="350" Width="400"
+        WindowStartupLocation="CenterScreen">
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- SQL Server Name -->
+        <TextBlock Text="SQL Server Instance:" />
+        <TextBox Grid.Row="0" Margin="0,20,0,10"
+                 Text="{Binding ServerName, UpdateSourceTrigger=PropertyChanged}" />
+
+        <!-- Authentication Type -->
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,10">
+            <RadioButton Content="Windows Authentication"
+                         IsChecked="{Binding IsWindowsAuth}"
+                         GroupName="AuthType" Margin="0,0,20,0"/>
+            <RadioButton Content="SQL Server Authentication"
+                         IsChecked="{Binding IsWindowsAuth, Converter={StaticResource InverseBoolConverter}}"
+                         GroupName="AuthType"/>
+        </StackPanel>
+
+        <!-- Username -->
+        <TextBlock Grid.Row="2" Text="Username:" />
+        <TextBox Grid.Row="2" Margin="0,20,0,10"
+                 Text="{Binding Username}" 
+                 IsEnabled="{Binding IsWindowsAuth, Converter={StaticResource InverseBoolConverter}}"/>
+
+        <!-- Password -->
+        <TextBlock Grid.Row="3" Text="Password:" />
+        <PasswordBox Grid.Row="3" Margin="0,20,0,10"
+                     IsEnabled="{Binding IsWindowsAuth, Converter={StaticResource InverseBoolConverter}}"
+                     x:Name="PasswordBox"/>
+
+        <!-- Bind PasswordBox.Password manually in code-behind -->
+        <Button Grid.Row="4" Content="Test Connection"
+                Command="{Binding TestConnectionCommand}"
+                Margin="0,10" Height="30"/>
+
+        <Button Grid.Row="5" Content="Create 'SyncCore' Database"
+                Command="{Binding CreateDatabaseCommand}"
+                Margin="0,10" Height="30"/>
+
+        <!-- (Optional) Status / Future use -->
+        <ProgressBar Grid.Row="6" Height="20" Minimum="0" Maximum="100"
+                     Value="0" Margin="0,10,0,0"/>
+    </Grid>
+</Window>

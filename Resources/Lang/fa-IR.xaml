@@ -1,0 +1,44 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
+    
+    <!-- Application -->
+    <system:String x:Key="AppTitle">پیکربندی SyncCore</system:String>
+    
+    <!-- Configuration Wizard -->
+    <system:String x:Key="ConfigurationWizardTitle">مراحل پیکربندی</system:String>
+    <system:String x:Key="Previous">قبلی</system:String>
+    <system:String x:Key="Next">بعدی</system:String>
+    <system:String x:Key="Finish">پایان</system:String>
+    <system:String x:Key="Cancel">انصراف</system:String>
+    
+    <!-- Database Connection -->
+    <system:String x:Key="DatabaseConnectionTitle">اتصال به پایگاه داده</system:String>
+    <system:String x:Key="ServerName">نام سرور:</system:String>
+    <system:String x:Key="Authentication">احراز هویت:</system:String>
+    <system:String x:Key="WindowsAuthentication">احراز هویت ویندوز</system:String>
+    <system:String x:Key="SqlServerAuthentication">احراز هویت SQL Server</system:String>
+    <system:String x:Key="Username">نام کاربری:</system:String>
+    <system:String x:Key="Password">رمز عبور:</system:String>
+    <system:String x:Key="TestConnection">تست اتصال</system:String>
+    <system:String x:Key="ConnectionSuccessful">اتصال موفقیت‌آمیز بود!</system:String>
+    <system:String x:Key="ConnectionFailed">اتصال ناموفق بود!</system:String>
+    
+    <!-- Sync Settings -->
+    <system:String x:Key="SyncSettingsTitle">تنظیمات همگام‌سازی</system:String>
+    <system:String x:Key="SourceDatabase">پایگاه داده مبدا:</system:String>
+    <system:String x:Key="TargetDatabase">پایگاه داده مقصد:</system:String>
+    <system:String x:Key="AvailableTables">جداول موجود:</system:String>
+    <system:String x:Key="SelectedTables">جداول انتخاب شده:</system:String>
+    <system:String x:Key="Add">افزودن</system:String>
+    <system:String x:Key="Remove">حذف</system:String>
+    
+    <!-- Summary -->
+    <system:String x:Key="SummaryTitle">خلاصه</system:String>
+    <system:String x:Key="SourceServer">سرور مبدا:</system:String>
+    <system:String x:Key="TargetServer">سرور مقصد:</system:String>
+    <system:String x:Key="TablesToSync">جداول برای همگام‌سازی:</system:String>
+    <system:String x:Key="ConfigurationComplete">پیکربندی تکمیل شد</system:String>
+    <system:String x:Key="ConfigurationSaved">پیکربندی با موفقیت ذخیره شد.</system:String>
+    
+</ResourceDictionary> 

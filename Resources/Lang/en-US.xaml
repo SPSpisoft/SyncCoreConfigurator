@@ -1,0 +1,44 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
+    
+    <!-- Application -->
+    <system:String x:Key="AppTitle">SyncCore Configurator</system:String>
+    
+    <!-- Configuration Wizard -->
+    <system:String x:Key="ConfigurationWizardTitle">Configuration Wizard</system:String>
+    <system:String x:Key="Previous">Previous</system:String>
+    <system:String x:Key="Next">Next</system:String>
+    <system:String x:Key="Finish">Finish</system:String>
+    <system:String x:Key="Cancel">Cancel</system:String>
+    
+    <!-- Database Connection -->
+    <system:String x:Key="DatabaseConnectionTitle">Database Connection</system:String>
+    <system:String x:Key="ServerName">Server Name:</system:String>
+    <system:String x:Key="Authentication">Authentication:</system:String>
+    <system:String x:Key="WindowsAuthentication">Windows Authentication</system:String>
+    <system:String x:Key="SqlServerAuthentication">SQL Server Authentication</system:String>
+    <system:String x:Key="Username">Username:</system:String>
+    <system:String x:Key="Password">Password:</system:String>
+    <system:String x:Key="TestConnection">Test Connection</system:String>
+    <system:String x:Key="ConnectionSuccessful">Connection successful!</system:String>
+    <system:String x:Key="ConnectionFailed">Connection failed!</system:String>
+    
+    <!-- Sync Settings -->
+    <system:String x:Key="SyncSettingsTitle">Sync Settings</system:String>
+    <system:String x:Key="SourceDatabase">Source Database:</system:String>
+    <system:String x:Key="TargetDatabase">Target Database:</system:String>
+    <system:String x:Key="AvailableTables">Available Tables:</system:String>
+    <system:String x:Key="SelectedTables">Selected Tables:</system:String>
+    <system:String x:Key="Add">Add</system:String>
+    <system:String x:Key="Remove">Remove</system:String>
+    
+    <!-- Summary -->
+    <system:String x:Key="SummaryTitle">Summary</system:String>
+    <system:String x:Key="SourceServer">Source Server:</system:String>
+    <system:String x:Key="TargetServer">Target Server:</system:String>
+    <system:String x:Key="TablesToSync">Tables to Sync:</system:String>
+    <system:String x:Key="ConfigurationComplete">Configuration Complete</system:String>
+    <system:String x:Key="ConfigurationSaved">Configuration has been saved successfully.</system:String>
+    
+</ResourceDictionary> 
