@@ -24,73 +24,84 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
 
-        <!-- Server Name -->
-        <TextBlock Grid.Row="0" Grid.Column="0" 
-                   Text="{DynamicResource ServerName}" 
-                   VerticalAlignment="Center" 
-                   Margin="0,0,10,10"/>
-        <ComboBox Grid.Row="0" Grid.Column="1" 
-                  ItemsSource="{Binding AvailableServers}"
-                  SelectedItem="{Binding ServerName}"
-                  IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBooleanConverter}}"
-                  Margin="0,0,0,10"/>
+            <!-- Server Name -->
+            <TextBlock Grid.Row="0" Grid.Column="0" 
+                       Text="{DynamicResource ServerName}" 
+                       VerticalAlignment="Center" 
+                       Margin="0,0,10,10"/>
+            <ComboBox Grid.Row="0" Grid.Column="1" 
+                      ItemsSource="{Binding AvailableServers}"
+                      SelectedItem="{Binding ServerName}"
+                      IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBooleanConverter}}"
+                      IsEditable="True"
+                      Margin="0,0,0,10"/>
 
-        <!-- Authentication -->
-        <TextBlock Grid.Row="1" Grid.Column="0" 
-                   Text="{DynamicResource Authentication}" 
-                   VerticalAlignment="Center" 
-                   Margin="0,0,10,10"/>
-        <ComboBox Grid.Row="1" Grid.Column="1" 
-                  ItemsSource="{Binding AuthenticationTypes}"
-                  SelectedItem="{Binding Authentication}"
-                  IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBooleanConverter}}"
-                  Margin="0,0,0,10"/>
+            <!-- Authentication -->
+            <TextBlock Grid.Row="1" Grid.Column="0" 
+                       Text="{DynamicResource Authentication}" 
+                       VerticalAlignment="Center" 
+                       Margin="0,0,10,10"/>
+            <ComboBox Grid.Row="1" Grid.Column="1" 
+                      ItemsSource="{Binding AuthenticationTypes}"
+                      SelectedItem="{Binding Authentication}"
+                      IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBooleanConverter}}"
+                      Margin="0,0,0,10"/>
 
-        <!-- Username -->
-        <TextBlock Grid.Row="2" Grid.Column="0" 
-                   Text="{DynamicResource Username}" 
-                   VerticalAlignment="Center" 
-                   Margin="0,0,10,10"
-                   Visibility="{Binding IsWindowsAuth, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
-        <TextBox Grid.Row="2" Grid.Column="1" 
-                 Text="{Binding Username}"
-                 IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBooleanConverter}}"
-                 Margin="0,0,0,10"
-                 Visibility="{Binding IsWindowsAuth, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
-
-        <!-- Password -->
-        <TextBlock Grid.Row="3" Grid.Column="0" 
-                   Text="{DynamicResource Password}" 
-                   VerticalAlignment="Center" 
-                   Margin="0,0,10,10"
-                   Visibility="{Binding IsWindowsAuth, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
-        <PasswordBox Grid.Row="3" Grid.Column="1" 
-                     x:Name="PasswordBox"
+            <!-- Username -->
+            <TextBlock Grid.Row="2" Grid.Column="0" 
+                       Text="{DynamicResource Username}" 
+                       VerticalAlignment="Center" 
+                       Margin="0,0,10,10"
+                       Visibility="{Binding IsWindowsAuth, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
+            <TextBox Grid.Row="2" Grid.Column="1" 
+                     Text="{Binding Username}"
                      IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBooleanConverter}}"
                      Margin="0,0,0,10"
                      Visibility="{Binding IsWindowsAuth, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
 
-        <!-- Database -->
-        <TextBlock Grid.Row="4" Grid.Column="0" 
-                   Text="{DynamicResource Database}" 
-                   VerticalAlignment="Center" 
-                   Margin="0,0,10,10"/>
-        <ComboBox Grid.Row="4" Grid.Column="1" 
-                  ItemsSource="{Binding AvailableDatabases}"
-                  SelectedItem="{Binding DatabaseName}"
-                  IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBooleanConverter}}"
-                  Margin="0,0,0,10"/>
-    </Grid>
+            <!-- Password -->
+            <TextBlock Grid.Row="3" Grid.Column="0" 
+                       Text="{DynamicResource Password}" 
+                       VerticalAlignment="Center" 
+                       Margin="0,0,10,10"
+                       Visibility="{Binding IsWindowsAuth, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
+            <PasswordBox Grid.Row="3" Grid.Column="1" 
+                         x:Name="PasswordBox"
+                         IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBooleanConverter}}"
+                         Margin="0,0,0,10"
+                         Visibility="{Binding IsWindowsAuth, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
 
-    <ProgressBar Grid.Row="1" Height="2" IsIndeterminate="True"
-                 Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}"
-                 VerticalAlignment="Top"/>
-</Grid>
+            <!-- Database -->
+            <TextBlock Grid.Row="4" Grid.Column="0" 
+                       Text="{DynamicResource Database}" 
+                       VerticalAlignment="Center" 
+                       Margin="0,0,10,10"/>
+            <ComboBox Grid.Row="4" Grid.Column="1" 
+                      ItemsSource="{Binding AvailableDatabases}"
+                      SelectedItem="{Binding DatabaseName}"
+                      IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBooleanConverter}}"
+                      Margin="0,0,10,10"/>
+
+            <!-- Verify Button -->
+            <Button Grid.Row="4" Grid.Column="2"
+                    Content="{DynamicResource Verify}"
+                    Command="{Binding VerifyConnectionCommand}"
+                    IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBooleanConverter}}"
+                    Style="{StaticResource AccentButtonStyle}"
+                    MinWidth="100"/>
+        </Grid>
+
+        <ProgressBar Grid.Row="1" Height="2" IsIndeterminate="True"
+                     Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}"
+                     VerticalAlignment="Top"/>
+    </Grid>
 </UserControl> 

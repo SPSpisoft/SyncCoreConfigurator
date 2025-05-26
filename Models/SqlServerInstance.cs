@@ -10,6 +10,9 @@ using System.Net.Sockets;
 using System.Text;
 using System.Management;
 using System.Threading.Tasks;
+using System.Data.SqlTypes;
+using Microsoft.SqlServer.Management.Smo;
+using Microsoft.SqlServer.Management.Common;
 
 namespace SyncCore.Models
 {
@@ -126,54 +129,66 @@ namespace SyncCore.Models
             try
             {
                 var servers = new List<string>();
-                
                 // Add local server
                 servers.Add(Environment.MachineName);
 
-                // Try to get SQL Server instances using WMI
+                // تلاش با SqlDataSourceEnumerator
                 try
                 {
-                    using (var searcher = new ManagementObjectSearcher(
-                        "SELECT * FROM Win32_Service WHERE Name LIKE 'MSSQL$%' OR Name = 'MSSQLSERVER'"))
+                    var enumerator = SqlDataSourceEnumerator.Instance;
+                    var dataTable = enumerator.GetDataSources();
+                    foreach (DataRow row in dataTable.Rows)
                     {
-                        foreach (ManagementObject service in searcher.Get())
+                        string serverName = row["ServerName"].ToString();
+                        string instanceName = row["InstanceName"].ToString();
+                        string fullName;
+                        if (string.IsNullOrEmpty(instanceName) || instanceName.ToUpper() == "MSSQLSERVER")
                         {
-                            string serviceName = service["Name"].ToString();
-                            string instanceName;
-
-                            if (serviceName == "MSSQLSERVER")
-                            {
-                                instanceName = Environment.MachineName;
-                            }
-                            else
-                            {
-                                // Extract instance name from service name (MSSQL$INSTANCENAME)
-                                instanceName = $"{Environment.MachineName}\\{serviceName.Substring(5)}";
-                            }
-
-                            if (!servers.Contains(instanceName))
-                            {
-                                servers.Add(instanceName);
-                            }
+                            fullName = serverName;
+                        }
+                        else
+                        {
+                            fullName = $"{serverName}\\{instanceName}";
+                        }
+                        if (!servers.Contains(fullName))
+                        {
+                            servers.Add(fullName);
                         }
                     }
                 }
                 catch
                 {
-                    // If WMI fails, continue with local servers
-                }
-
-                // Add common instance names if not already added
-                var commonInstances = new[] { "SQLEXPRESS", "MSSQLSERVER" };
-                foreach (var instance in commonInstances)
-                {
-                    var instanceName = $"{Environment.MachineName}\\{instance}";
-                    if (!servers.Contains(instanceName))
+                    // اگر SqlDataSourceEnumerator جواب نداد، از WMI استفاده کن
+                    try
                     {
-                        servers.Add(instanceName);
+                        using (var searcher = new ManagementObjectSearcher(
+                            "SELECT * FROM Win32_Service WHERE Name LIKE 'MSSQL$%' OR Name = 'MSSQLSERVER'"))
+                        {
+                            foreach (ManagementObject service in searcher.Get())
+                            {
+                                string serviceName = service["Name"].ToString();
+                                string instanceName;
+                                if (serviceName == "MSSQLSERVER")
+                                {
+                                    instanceName = Environment.MachineName;
+                                }
+                                else
+                                {
+                                    string actualInstanceName = serviceName.Replace("MSSQL$", "");
+                                    instanceName = $"{Environment.MachineName}\\{actualInstanceName}";
+                                }
+                                if (!servers.Contains(instanceName))
+                                {
+                                    servers.Add(instanceName);
+                                }
+                            }
+                        }
+                    }
+                    catch
+                    {
+                        // اگر هیچ روشی جواب نداد، فقط سرور لوکال رو نمایش بده
                     }
                 }
-
                 AvailableServers = servers.Distinct().ToList();
             }
             catch
@@ -287,7 +302,6 @@ namespace SyncCore.Models
             return await Task.Run(() =>
             {
                 var servers = new List<SqlServerInstance>();
-                
                 try
                 {
                     // Add local server first
@@ -296,60 +310,78 @@ namespace SyncCore.Models
                         ServerName = Environment.MachineName,
                         IsLocal = true
                     });
-
-                    // Find SQL Server instances using WMI
-                    using (var searcher = new ManagementObjectSearcher(
-                        "SELECT * FROM Win32_Service WHERE Name LIKE 'MSSQL$%' OR Name = 'MSSQLSERVER'"))
+                    // تلاش با SqlDataSourceEnumerator
+                    try
                     {
-                        foreach (ManagementObject service in searcher.Get())
+                        var enumerator = SqlDataSourceEnumerator.Instance;
+                        var dataTable = enumerator.GetDataSources();
+                        foreach (DataRow row in dataTable.Rows)
                         {
-                            string serviceName = service["Name"].ToString();
-                            string instanceName;
-
-                            if (serviceName == "MSSQLSERVER")
+                            string serverName = row["ServerName"].ToString();
+                            string instanceName = row["InstanceName"].ToString();
+                            string fullName;
+                            if (string.IsNullOrEmpty(instanceName) || instanceName.ToUpper() == "MSSQLSERVER")
                             {
-                                instanceName = Environment.MachineName;
+                                fullName = serverName;
                             }
                             else
                             {
-                                // Extract instance name from service name (MSSQL$INSTANCENAME)
-                                instanceName = $"{Environment.MachineName}\\{serviceName.Substring(5)}";
+                                fullName = $"{serverName}\\{instanceName}";
                             }
-
-                            if (!servers.Any(s => s.ServerName == instanceName))
+                            if (!servers.Any(s => s.ServerName == fullName))
                             {
                                 servers.Add(new SqlServerInstance
                                 {
-                                    ServerName = instanceName,
-                                    InstanceName = serviceName == "MSSQLSERVER" ? null : serviceName.Substring(5),
-                                    IsLocal = true
+                                    ServerName = fullName,
+                                    InstanceName = (string.IsNullOrEmpty(instanceName) || instanceName.ToUpper() == "MSSQLSERVER") ? null : instanceName,
+                                    IsLocal = serverName == Environment.MachineName
                                 });
                             }
                         }
                     }
-
-                    // Add common instance names if not already added
-                    var commonInstances = new[] { "SQLEXPRESS", "MSSQLSERVER" };
-                    foreach (var instance in commonInstances)
+                    catch
                     {
-                        var instanceName = $"{Environment.MachineName}\\{instance}";
-                        if (!servers.Any(s => s.ServerName == instanceName))
+                        // اگر SqlDataSourceEnumerator جواب نداد، از WMI استفاده کن
+                        try
                         {
-                            servers.Add(new SqlServerInstance
+                            using (var searcher = new ManagementObjectSearcher(
+                                "SELECT * FROM Win32_Service WHERE Name LIKE 'MSSQL$%' OR Name = 'MSSQLSERVER'"))
                             {
-                                ServerName = instanceName,
-                                InstanceName = instance,
-                                IsLocal = true
-                            });
+                                foreach (ManagementObject service in searcher.Get())
+                                {
+                                    string serviceName = service["Name"].ToString();
+                                    string instanceName;
+                                    if (serviceName == "MSSQLSERVER")
+                                    {
+                                        instanceName = Environment.MachineName;
+                                    }
+                                    else
+                                    {
+                                        string actualInstanceName = serviceName.Replace("MSSQL$", "");
+                                        instanceName = $"{Environment.MachineName}\\{actualInstanceName}";
+                                    }
+                                    if (!servers.Any(s => s.ServerName == instanceName))
+                                    {
+                                        servers.Add(new SqlServerInstance
+                                        {
+                                            ServerName = instanceName,
+                                            InstanceName = serviceName == "MSSQLSERVER" ? null : serviceName.Replace("MSSQL$", ""),
+                                            IsLocal = true
+                                        });
+                                    }
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            System.Diagnostics.Debug.WriteLine($"Error finding SQL Server instances: {ex.Message}");
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    // Log error or handle it appropriately
                     System.Diagnostics.Debug.WriteLine($"Error finding SQL Server instances: {ex.Message}");
                 }
-
                 return servers;
             });
         }

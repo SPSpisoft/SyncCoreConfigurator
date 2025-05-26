@@ -67,6 +67,7 @@ namespace SyncCore.ViewModels
         }
 
         public ICommand LoadServersCommand { get; }
+        public ICommand VerifyConnectionCommand { get; }
 
         public DatabaseConnectionViewModel()
         {
@@ -74,7 +75,45 @@ namespace SyncCore.ViewModels
             _availableDatabases = new ObservableCollection<string>();
             _authentication = "Windows Authentication";
             LoadServersCommand = new RelayCommand(async _ => await LoadServers());
+            VerifyConnectionCommand = new RelayCommand(async _ => await VerifyConnection(), CanVerifyConnection);
             LoadServersCommand.Execute(null);
+        }
+
+        private bool CanVerifyConnection(object parameter)
+        {
+            return !IsLoading && !string.IsNullOrEmpty(ServerName) &&
+                   (Authentication == "Windows Authentication" || 
+                    (!string.IsNullOrEmpty(Username) && !string.IsNullOrEmpty(Password)));
+        }
+
+        private async Task VerifyConnection()
+        {
+            if (string.IsNullOrEmpty(ServerName))
+                return;
+
+            IsLoading = true;
+            try
+            {
+                using (var connection = new SqlConnection(BuildConnectionString()))
+                {
+                    await connection.OpenAsync();
+                    using (var command = new SqlCommand("SELECT 1", connection))
+                    {
+                        await command.ExecuteScalarAsync();
+                    }
+                    System.Windows.MessageBox.Show("Connection successful!", "Success", 
+                        System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show($"Connection failed: {ex.Message}", "Error", 
+                    System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+            }
+            finally
+            {
+                IsLoading = false;
+            }
         }
 
         private async Task LoadServers()

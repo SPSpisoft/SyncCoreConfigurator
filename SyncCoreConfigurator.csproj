@@ -13,6 +13,7 @@
   <ItemGroup>
     <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
     <PackageReference Include="System.Management" Version="8.0.0" />
+    <PackageReference Include="Microsoft.SqlServer.SqlManagementObjects" Version="161.47021.0" />
   </ItemGroup>
 
   <ItemGroup>
