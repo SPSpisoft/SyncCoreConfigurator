@@ -7,7 +7,7 @@ using System.Windows.Input;
 using SyncCore.Helpers;
 using SyncCore.Models;
 using System.Windows;
-using SyncCore.Commands;
+// using SyncCore.Commands; // حذف شد
 using SyncCore.ViewModels;
 
 namespace SyncCore.ViewModels
@@ -52,8 +52,8 @@ namespace SyncCore.ViewModels
             {
                 if (SetProperty(ref _currentStep, value))
                 {
+                    UpdateNavigationButtons();
                     LoadStepViewModel();
-                    UpdateNavigationVisibility();
                 }
             }
         }
@@ -240,7 +240,9 @@ namespace SyncCore.ViewModels
             FinishCommand = new RelayCommand(Finish, CanFinish);
             CancelCommand = new RelayCommand(Cancel);
 
+            // Initialize with first step
             CurrentStep = 0;
+            CurrentStepViewModel = new DatabaseConnectionViewModel();
         }
 
         /// <summary>
@@ -261,7 +263,7 @@ namespace SyncCore.ViewModels
         /// <remarks>
         /// به‌روزرسانی وضعیت نمایش دکمه‌ها
         /// </remarks>
-        private void UpdateNavigationVisibility()
+        private void UpdateNavigationButtons()
         {
             IsPreviousVisible = CurrentStep > 0;
             IsNextVisible = CurrentStep < _steps.Count - 1;
@@ -394,10 +396,10 @@ namespace SyncCore.ViewModels
             return !IsBusy && CurrentStep > 0;
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+        // event PropertyChangedEventHandler PropertyChanged; // حذف شد
+        // protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) // حذف شد
+        // {
+        //     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        // }
     }
-} 
+}

@@ -3,17 +3,41 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:SyncCore"
              xmlns:helpers="clr-namespace:SyncCore.Helpers"
+             xmlns:views="clr-namespace:SyncCore.Views"
+             xmlns:vm="clr-namespace:SyncCore.ViewModels"
              StartupUri="Views/ConfigurationWizardView.xaml">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Lang/en-US.xaml"/>
-                <ResourceDictionary Source="Resources/Lang/fa-IR.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            
+            <!-- Database Icons -->
+            <Canvas x:Key="ProjectDatabaseIcon" Width="24" Height="24">
+                <Path Data="M12,2C6.48,2 2,6.48 2,12s4.48,10 10,10 10,-4.48 10,-10S17.52,2 12,2zM12,20c-4.41,0 -8,-3.59 -8,-8s3.59,-8 8,-8 8,3.59 8,8 -3.59,8 -8,8z" Fill="#2196F3"/>
+                <Path Data="M12,6c-3.31,0 -6,2.69 -6,6s2.69,6 6,6 6,-2.69 6,-6 -2.69,-6 -6,-6zM12,16c-2.21,0 -4,-1.79 -4,-4s1.79,-4 4,-4 4,1.79 4,4 -1.79,4 -4,4z" Fill="#2196F3"/>
+            </Canvas>
+            
+            <Canvas x:Key="SourceDatabaseIcon" Width="24" Height="24">
+                <Path Data="M12,2C6.48,2 2,6.48 2,12s4.48,10 10,10 10,-4.48 10,-10S17.52,2 12,2zM12,20c-4.41,0 -8,-3.59 -8,-8s3.59,-8 8,-8 8,3.59 8,8 -3.59,8 -8,8z" Fill="#4CAF50"/>
+                <Path Data="M12,6c-3.31,0 -6,2.69 -6,6s2.69,6 6,6 6,-2.69 6,-6 -2.69,-6 -6,-6zM12,16c-2.21,0 -4,-1.79 -4,-4s1.79,-4 4,-4 4,1.79 4,4 -1.79,4 -4,4z" Fill="#4CAF50"/>
+            </Canvas>
+            
+            <Canvas x:Key="TargetDatabaseIcon" Width="24" Height="24">
+                <Path Data="M12,2C6.48,2 2,6.48 2,12s4.48,10 10,10 10,-4.48 10,-10S17.52,2 12,2zM12,20c-4.41,0 -8,-3.59 -8,-8s3.59,-8 8,-8 8,3.59 8,8 -3.59,8 -8,8z" Fill="#FF9800"/>
+                <Path Data="M12,6c-3.31,0 -6,2.69 -6,6s2.69,6 6,6 6,-2.69 6,-6 -2.69,-6 -6,-6zM12,16c-2.21,0 -4,-1.79 -4,-4s1.79,-4 4,-4 4,1.79 4,4 -1.79,4 -4,4z" Fill="#FF9800"/>
+            </Canvas>
+            
+            <!-- Window Style -->
+            <Style TargetType="Window">
+                <Setter Property="Background" Value="White"/>
+                <Setter Property="FontFamily" Value="Segoe UI"/>
+                <Setter Property="FontSize" Value="12"/>
+            </Style>
             
             <!-- Converters -->
             <helpers:BooleanToBrushConverter x:Key="BooleanToBrushConverter"/>
-            <local:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+            <helpers:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
             <helpers:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
             <helpers:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter"/>
             <helpers:StepIndexToButtonTextConverter x:Key="StepIndexToButtonTextConverter"/>
@@ -51,6 +75,20 @@
                 <Setter Property="Height" Value="2"/>
                 <Setter Property="Margin" Value="0,5"/>
             </Style>
+            
+            <!-- DataTemplates for wizard steps -->
+            <DataTemplate DataType="{x:Type vm:DatabaseConnectionViewModel}">
+                <views:DatabaseConnectionView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:SyncSettingsViewModel}">
+                <views:SyncSettingsView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:ScheduleViewModel}">
+                <views:ScheduleView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:ReviewViewModel}">
+                <views:ReviewView />
+            </DataTemplate>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

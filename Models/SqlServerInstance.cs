@@ -9,6 +9,7 @@ using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
 using System.Management;
+using System.Threading.Tasks;
 
 namespace SyncCore.Models
 {
@@ -279,6 +280,78 @@ namespace SyncCore.Models
         public override string ToString()
         {
             return FullName;
+        }
+
+        public static async Task<List<SqlServerInstance>> GetAvailableServers()
+        {
+            return await Task.Run(() =>
+            {
+                var servers = new List<SqlServerInstance>();
+                
+                try
+                {
+                    // Add local server first
+                    servers.Add(new SqlServerInstance
+                    {
+                        ServerName = Environment.MachineName,
+                        IsLocal = true
+                    });
+
+                    // Find SQL Server instances using WMI
+                    using (var searcher = new ManagementObjectSearcher(
+                        "SELECT * FROM Win32_Service WHERE Name LIKE 'MSSQL$%' OR Name = 'MSSQLSERVER'"))
+                    {
+                        foreach (ManagementObject service in searcher.Get())
+                        {
+                            string serviceName = service["Name"].ToString();
+                            string instanceName;
+
+                            if (serviceName == "MSSQLSERVER")
+                            {
+                                instanceName = Environment.MachineName;
+                            }
+                            else
+                            {
+                                // Extract instance name from service name (MSSQL$INSTANCENAME)
+                                instanceName = $"{Environment.MachineName}\\{serviceName.Substring(5)}";
+                            }
+
+                            if (!servers.Any(s => s.ServerName == instanceName))
+                            {
+                                servers.Add(new SqlServerInstance
+                                {
+                                    ServerName = instanceName,
+                                    InstanceName = serviceName == "MSSQLSERVER" ? null : serviceName.Substring(5),
+                                    IsLocal = true
+                                });
+                            }
+                        }
+                    }
+
+                    // Add common instance names if not already added
+                    var commonInstances = new[] { "SQLEXPRESS", "MSSQLSERVER" };
+                    foreach (var instance in commonInstances)
+                    {
+                        var instanceName = $"{Environment.MachineName}\\{instance}";
+                        if (!servers.Any(s => s.ServerName == instanceName))
+                        {
+                            servers.Add(new SqlServerInstance
+                            {
+                                ServerName = instanceName,
+                                InstanceName = instance,
+                                IsLocal = true
+                            });
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Log error or handle it appropriately
+                    System.Diagnostics.Debug.WriteLine($"Error finding SQL Server instances: {ex.Message}");
+                }
+
+                return servers;
+            });
         }
     }
 } 

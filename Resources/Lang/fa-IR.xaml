@@ -13,19 +13,20 @@
     <system:String x:Key="Cancel">انصراف</system:String>
     
     <!-- Database Connection -->
-    <system:String x:Key="DatabaseConnectionTitle">اتصال به پایگاه داده</system:String>
+    <system:String x:Key="DatabaseConnection">اتصال به پایگاه داده</system:String>
     <system:String x:Key="ServerName">نام سرور:</system:String>
     <system:String x:Key="Authentication">احراز هویت:</system:String>
     <system:String x:Key="WindowsAuthentication">احراز هویت ویندوز</system:String>
     <system:String x:Key="SqlServerAuthentication">احراز هویت SQL Server</system:String>
     <system:String x:Key="Username">نام کاربری:</system:String>
     <system:String x:Key="Password">رمز عبور:</system:String>
+    <system:String x:Key="Database">پایگاه داده:</system:String>
     <system:String x:Key="TestConnection">تست اتصال</system:String>
     <system:String x:Key="ConnectionSuccessful">اتصال موفقیت‌آمیز بود!</system:String>
     <system:String x:Key="ConnectionFailed">اتصال ناموفق بود!</system:String>
     
     <!-- Sync Settings -->
-    <system:String x:Key="SyncSettingsTitle">تنظیمات همگام‌سازی</system:String>
+    <system:String x:Key="SyncSettings">تنظیمات همگام‌سازی</system:String>
     <system:String x:Key="SourceDatabase">پایگاه داده مبدا:</system:String>
     <system:String x:Key="TargetDatabase">پایگاه داده مقصد:</system:String>
     <system:String x:Key="AvailableTables">جداول موجود:</system:String>
@@ -33,8 +34,15 @@
     <system:String x:Key="Add">افزودن</system:String>
     <system:String x:Key="Remove">حذف</system:String>
     
-    <!-- Summary -->
-    <system:String x:Key="SummaryTitle">خلاصه</system:String>
+    <!-- Schedule -->
+    <system:String x:Key="Schedule">زمان‌بندی</system:String>
+    <system:String x:Key="SyncFrequency">تناوب همگام‌سازی:</system:String>
+    <system:String x:Key="StartTime">زمان شروع:</system:String>
+    <system:String x:Key="SelectedDays">روزهای انتخاب شده:</system:String>
+    <system:String x:Key="Interval">فاصله زمانی:</system:String>
+    
+    <!-- Review -->
+    <system:String x:Key="ConfigurationSummary">خلاصه پیکربندی</system:String>
     <system:String x:Key="SourceServer">سرور مبدا:</system:String>
     <system:String x:Key="TargetServer">سرور مقصد:</system:String>
     <system:String x:Key="TablesToSync">جداول برای همگام‌سازی:</system:String>

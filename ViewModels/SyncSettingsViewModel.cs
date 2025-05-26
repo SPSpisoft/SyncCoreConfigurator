@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Data.SqlClient;
 using System.Linq;
@@ -6,29 +6,28 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using SyncCore.Helpers;
-using SyncCore.Commands;
 using SyncCore.Models;
 
 namespace SyncCore.ViewModels
 {
     public class SyncSettingsViewModel : ViewModelBase
     {
-        private ObservableCollection<DatabaseConnection> _availableDatabases;
-        private DatabaseConnection _sourceDatabase;
-        private DatabaseConnection _targetDatabase;
+        private ObservableCollection<SqlServerInstance> _availableDatabases;
+        private SqlServerInstance _sourceDatabase;
+        private SqlServerInstance _targetDatabase;
         private ObservableCollection<string> _availableTables;
         private ObservableCollection<string> _selectedTables;
         private bool _isLoading;
         private string _selectedAvailableTable;
         private string _selectedTable;
 
-        public ObservableCollection<DatabaseConnection> AvailableDatabases
+        public ObservableCollection<SqlServerInstance> AvailableDatabases
         {
             get => _availableDatabases;
             set => SetProperty(ref _availableDatabases, value);
         }
 
-        public DatabaseConnection SourceDatabase
+        public SqlServerInstance SourceDatabase
         {
             get => _sourceDatabase;
             set
@@ -40,7 +39,7 @@ namespace SyncCore.ViewModels
             }
         }
 
-        public DatabaseConnection TargetDatabase
+        public SqlServerInstance TargetDatabase
         {
             get => _targetDatabase;
             set => SetProperty(ref _targetDatabase, value);
@@ -81,16 +80,16 @@ namespace SyncCore.ViewModels
 
         public SyncSettingsViewModel()
         {
-            AvailableDatabases = new ObservableCollection<DatabaseConnection>();
+            AvailableDatabases = new ObservableCollection<SqlServerInstance>();
             AvailableTables = new ObservableCollection<string>();
             SelectedTables = new ObservableCollection<string>();
-            AddTableCommand = new RelayCommand(AddTable, CanAddTable);
-            RemoveTableCommand = new RelayCommand(RemoveTable, CanRemoveTable);
+            AddTableCommand = new SyncCore.Helpers.RelayCommand(AddTable, CanAddTable); // تغییر به SyncCore.Helpers.RelayCommand
+            RemoveTableCommand = new SyncCore.Helpers.RelayCommand(RemoveTable, CanRemoveTable); // تغییر به SyncCore.Helpers.RelayCommand
         }
 
         private bool CanAddTable()
         {
-            return !string.IsNullOrEmpty(SelectedAvailableTable) && 
+            return !string.IsNullOrEmpty(SelectedAvailableTable) &&
                    !SelectedTables.Contains(SelectedAvailableTable);
         }
 
@@ -128,7 +127,7 @@ namespace SyncCore.ViewModels
 
             try
             {
-                using (var connection = new SqlConnection(SourceDatabase.ConnectionString))
+                using (var connection = new SqlConnection(SourceDatabase.BuildConnectionString()))
                 {
                     await connection.OpenAsync();
                     var command = new SqlCommand(
@@ -154,17 +153,5 @@ namespace SyncCore.ViewModels
                 IsLoading = false;
             }
         }
-
-        private string BuildConnectionString()
-        {
-            var builder = new SqlConnectionStringBuilder
-            {
-                DataSource = ".",
-                InitialCatalog = SourceDatabase.DatabaseName,
-                IntegratedSecurity = true
-            };
-
-            return builder.ConnectionString;
-        }
     }
-} 
+}

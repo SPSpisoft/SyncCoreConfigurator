@@ -13,19 +13,20 @@
     <system:String x:Key="Cancel">Cancel</system:String>
     
     <!-- Database Connection -->
-    <system:String x:Key="DatabaseConnectionTitle">Database Connection</system:String>
+    <system:String x:Key="DatabaseConnection">Database Connection</system:String>
     <system:String x:Key="ServerName">Server Name:</system:String>
     <system:String x:Key="Authentication">Authentication:</system:String>
     <system:String x:Key="WindowsAuthentication">Windows Authentication</system:String>
     <system:String x:Key="SqlServerAuthentication">SQL Server Authentication</system:String>
     <system:String x:Key="Username">Username:</system:String>
     <system:String x:Key="Password">Password:</system:String>
+    <system:String x:Key="Database">Database:</system:String>
     <system:String x:Key="TestConnection">Test Connection</system:String>
     <system:String x:Key="ConnectionSuccessful">Connection successful!</system:String>
     <system:String x:Key="ConnectionFailed">Connection failed!</system:String>
     
     <!-- Sync Settings -->
-    <system:String x:Key="SyncSettingsTitle">Sync Settings</system:String>
+    <system:String x:Key="SyncSettings">Sync Settings</system:String>
     <system:String x:Key="SourceDatabase">Source Database:</system:String>
     <system:String x:Key="TargetDatabase">Target Database:</system:String>
     <system:String x:Key="AvailableTables">Available Tables:</system:String>
@@ -33,8 +34,15 @@
     <system:String x:Key="Add">Add</system:String>
     <system:String x:Key="Remove">Remove</system:String>
     
-    <!-- Summary -->
-    <system:String x:Key="SummaryTitle">Summary</system:String>
+    <!-- Schedule -->
+    <system:String x:Key="Schedule">Schedule</system:String>
+    <system:String x:Key="SyncFrequency">Sync Frequency:</system:String>
+    <system:String x:Key="StartTime">Start Time:</system:String>
+    <system:String x:Key="SelectedDays">Selected Days:</system:String>
+    <system:String x:Key="Interval">Interval:</system:String>
+    
+    <!-- Review -->
+    <system:String x:Key="ConfigurationSummary">Configuration Summary</system:String>
     <system:String x:Key="SourceServer">Source Server:</system:String>
     <system:String x:Key="TargetServer">Target Server:</system:String>
     <system:String x:Key="TablesToSync">Tables to Sync:</system:String>

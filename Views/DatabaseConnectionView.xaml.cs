@@ -1,5 +1,6 @@
 using System.Windows;
 using System.Windows.Controls;
+using SyncCore.ViewModels;
 
 namespace SyncCore.Views
 {
@@ -14,6 +15,7 @@ namespace SyncCore.Views
         public DatabaseConnectionView()
         {
             InitializeComponent();
+            DataContext = new DatabaseConnectionViewModel();
         }
     }
 } 

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
@@ -70,27 +70,24 @@ namespace SyncCore.ViewModels
 
         public DatabaseConnectionViewModel()
         {
-            AvailableServers = new ObservableCollection<SqlServerInstance>();
-            AvailableDatabases = new ObservableCollection<string>();
-            LoadServersCommand = new RelayCommand(LoadAvailableServers);
-            LoadAvailableServers();
+            _availableServers = new ObservableCollection<SqlServerInstance>();
+            _availableDatabases = new ObservableCollection<string>();
+            _authentication = "Windows Authentication";
+            LoadServersCommand = new RelayCommand(async _ => await LoadServers());
+            LoadServersCommand.Execute(null);
         }
 
-        private async void LoadAvailableServers()
+        private async Task LoadServers()
         {
             IsLoading = true;
             try
             {
-                // Add local server
-                AvailableServers.Add(new SqlServerInstance
+                var servers = await SqlServerInstance.GetAvailableServers();
+                AvailableServers.Clear();
+                foreach (var server in servers)
                 {
-                    ServerName = "localhost",
-                    IsLocal = true
-                });
-
-                // Add SQL Server instances using SMO
-                // This is a placeholder - you'll need to implement the actual SMO code
-                // to enumerate SQL Server instances on the network
+                    AvailableServers.Add(server);
+                }
             }
             catch (Exception ex)
             {
@@ -103,13 +100,10 @@ namespace SyncCore.ViewModels
             }
         }
 
-        private async void LoadAvailableDatabases()
+        private async Task LoadAvailableDatabases()
         {
             if (string.IsNullOrEmpty(ServerName))
-            {
-                AvailableDatabases.Clear();
                 return;
-            }
 
             IsLoading = true;
             try
@@ -161,4 +155,4 @@ namespace SyncCore.ViewModels
             return builder.ConnectionString;
         }
     }
-} 
+}

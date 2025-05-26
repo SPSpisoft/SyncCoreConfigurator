@@ -18,17 +18,9 @@ namespace SyncCore.Helpers
         {
             if (value is bool boolValue)
             {
-                if (parameter is string colors)
-                {
-                    var colorArray = colors.Split(';');
-                    if (colorArray.Length == 2)
-                    {
-                        return new SolidColorBrush((Color)ColorConverter.ConvertFromString(boolValue ? colorArray[0] : colorArray[1]));
-                    }
-                }
-                return new SolidColorBrush(boolValue ? Colors.Blue : Colors.Gray);
+                return boolValue ? new SolidColorBrush(Colors.Green) : new SolidColorBrush(Colors.Red);
             }
-            return null;
+            return new SolidColorBrush(Colors.Gray);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -47,12 +39,20 @@ namespace SyncCore.Helpers
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return value is bool boolValue && boolValue ? Visibility.Visible : Visibility.Collapsed;
+            if (value is bool boolValue)
+            {
+                return boolValue ? Visibility.Visible : Visibility.Collapsed;
+            }
+            return Visibility.Collapsed;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return value is Visibility visibility && visibility == Visibility.Visible;
+            if (value is Visibility visibility)
+            {
+                return visibility == Visibility.Visible;
+            }
+            return false;
         }
     }
 
@@ -66,12 +66,20 @@ namespace SyncCore.Helpers
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return value is bool boolValue ? !boolValue : value;
+            if (value is bool boolValue)
+            {
+                return !boolValue;
+            }
+            return value;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return value is bool boolValue ? !boolValue : value;
+            if (value is bool boolValue)
+            {
+                return !boolValue;
+            }
+            return value;
         }
     }
 
@@ -79,12 +87,20 @@ namespace SyncCore.Helpers
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return value is bool boolValue && !boolValue ? Visibility.Visible : Visibility.Collapsed;
+            if (value is bool boolValue)
+            {
+                return !boolValue ? Visibility.Visible : Visibility.Collapsed;
+            }
+            return Visibility.Visible;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return value is Visibility visibility && visibility != Visibility.Visible;
+            if (value is Visibility visibility)
+            {
+                return visibility != Visibility.Visible;
+            }
+            return true;
         }
     }
 
@@ -94,9 +110,26 @@ namespace SyncCore.Helpers
         {
             if (value is int stepIndex)
             {
-                return stepIndex == 3 ? "Finish" : "Next";
+                return stepIndex == 2 ? "Finish" : "Next";
             }
             return "Next";
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class StringToVisibilityConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is string stringValue)
+            {
+                return string.IsNullOrWhiteSpace(stringValue) ? Visibility.Collapsed : Visibility.Visible;
+            }
+            return Visibility.Collapsed;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

@@ -1,5 +1,6 @@
 using System.Windows;
 using System.Globalization;
+using System.Windows.Media;
 
 namespace SyncCore
 {
@@ -10,8 +11,15 @@ namespace SyncCore
             base.OnStartup(e);
             
             // Set default culture to English
-            CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
-            CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("en-US");
+            var culture = new CultureInfo("en-US");
+            CultureInfo.DefaultThreadCurrentCulture = culture;
+            CultureInfo.DefaultThreadCurrentUICulture = culture;
+            CultureInfo.CurrentCulture = culture;
+            CultureInfo.CurrentUICulture = culture;
+
+            // Set default background color
+            Resources["WindowBackground"] = Brushes.White;
+            Resources["GridBackground"] = Brushes.White;
         }
     }
 } 

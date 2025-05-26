@@ -14,6 +14,7 @@ namespace SyncCore.Views
         public ConfigurationWizardView()
         {
             InitializeComponent();
+            DataContext = new ConfigurationWizardViewModel();
         }
     }
 } 
